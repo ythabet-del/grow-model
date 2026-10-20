@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GROW Coaching Lab | Practice</title>
+<style>
+:root{
+  --magenta:#D41472;
+  --magenta-dark:#A70D57;
+  --yellow:#FFD928;
+  --black:#171319;
+  --ink:#28232B;
+  --muted:#716975;
+  --paper:#FFFDF8;
+  --white:#FFFFFF;
+  --line:#E8E0E6;
+  --soft-magenta:#FCE7F1;
+  --soft-yellow:#FFF7C7;
+  --good:#18794E;
+  --soft-good:#E6F6ED;
+  --bad:#A83232;
+  --soft-bad:#FCEAEA;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+.hero{background:var(--black);color:var(--white);padding:30px 20px 28px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:250px;height:250px;border-radius:50%;background:var(--magenta);right:-70px;top:-120px;opacity:.9}
+.hero-inner,.container{max-width:1080px;margin:0 auto;position:relative}
+.brand-row{display:flex;align-items:center;gap:10px;margin-bottom:22px;position:relative;z-index:1}
+.brand-mark{width:34px;height:34px;background:var(--yellow);border-radius:9px;display:grid;place-items:center;color:var(--black);font-weight:950;font-size:19px}
+.brand-name{font-size:12px;letter-spacing:.17em;text-transform:uppercase;font-weight:800}
+.eyebrow{color:var(--yellow);font-size:12px;text-transform:uppercase;letter-spacing:.18em;font-weight:800;margin:0 0 7px}
+h1{font-size:clamp(32px,5vw,54px);line-height:1.03;letter-spacing:-.04em;margin:0;max-width:720px;position:relative;z-index:1}
+.hero p{max-width:680px;color:#E8E2E9;margin:15px 0 0;position:relative;z-index:1}
+.hero .accent{color:var(--yellow)}
+.container{padding:25px 20px 42px}
+.intro-row{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:stretch;margin-bottom:20px}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 8px 26px rgba(23,19,25,.04)}
+.panel h2,.panel h3{margin:0 0 8px;color:var(--black);letter-spacing:-.02em}
+.panel p{margin:0;color:var(--muted)}
+.phase-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 22px}
+.phase-tab{border:1px solid var(--line);border-radius:14px;padding:13px 12px;background:var(--white);text-align:left;transition:.18s ease;min-width:0}
+.phase-tab:hover{transform:translateY(-2px);border-color:var(--magenta)}
+.phase-tab[aria-pressed="true"]{background:var(--black);color:var(--white);border-color:var(--black);box-shadow:inset 0 -4px var(--yellow)}
+.phase-letter{display:inline-grid;place-items:center;width:29px;height:29px;border-radius:9px;background:var(--soft-magenta);color:var(--magenta-dark);font-weight:900;margin-bottom:8px}
+.phase-tab[aria-pressed="true"] .phase-letter{background:var(--yellow);color:var(--black)}
+.phase-tab strong{display:block;font-size:15px}
+.phase-tab small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.phase-tab[aria-pressed="true"] small{color:#D5CDD8}
+.practice-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.8fr);gap:18px;align-items:start}
+.question-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.pill{display:inline-flex;align-items:center;border-radius:999px;background:var(--soft-yellow);color:var(--black);padding:5px 10px;font-size:11px;font-weight:850;letter-spacing:.04em;text-transform:uppercase}
+.progress-text{font-size:12px;color:var(--muted);font-weight:700;white-space:nowrap}
+.progress{height:7px;border-radius:99px;background:#F0EAF0;overflow:hidden;margin:0 0 21px}
+.progress-bar{height:100%;width:0;background:var(--magenta);transition:width .25s}
+.scenario{border-left:4px solid var(--magenta);background:#FBF5F8;border-radius:0 12px 12px 0;padding:13px 15px;margin:0 0 20px}
+.scenario-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--magenta-dark);font-weight:900;margin-bottom:4px}
+.scenario p{margin:0;color:#49404B}
+.question{font-size:clamp(19px,2.5vw,24px);line-height:1.3;letter-spacing:-.025em;margin:0 0 16px;color:var(--black)}
+.options{display:grid;gap:9px}
+.option{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:14px;border:1.5px solid var(--line);border-radius:13px;background:var(--white);color:var(--ink);transition:.15s}
+.option:hover:not(:disabled){border-color:var(--magenta);background:#FFF8FB}
+.option:disabled{cursor:default;opacity:1}
+.option-key{flex:0 0 28px;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#F3EEF2;color:#625864;font-size:12px;font-weight:900}
+.option.correct{border-color:var(--good);background:var(--soft-good)}
+.option.correct .option-key{background:var(--good);color:white}
+.option.incorrect{border-color:var(--bad);background:var(--soft-bad)}
+.option.incorrect .option-key{background:var(--bad);color:white}
+.feedback{margin-top:14px;border-radius:12px;padding:14px;display:none}
+.feedback.show{display:block}
+.feedback.good{background:var(--soft-good);border:1px solid #B7E6CA}
+.feedback.bad{background:var(--soft-bad);border:1px solid #F2C6C6}
+.feedback strong{display:block;margin-bottom:3px}
+.feedback p{margin:0;font-size:14px}
+.controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}
+.btn{border:0;border-radius:11px;padding:11px 16px;font-weight:850;transition:.15s}
+.btn-primary{background:var(--magenta);color:white}
+.btn-primary:hover{background:var(--magenta-dark)}
+.btn-dark{background:var(--black);color:white}
+.btn-dark:hover{background:#373039}
+.btn-light{background:white;border:1px solid var(--line);color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.side-card{position:sticky;top:16px}
+.side-card .mini-title{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--magenta-dark);font-weight:900}
+.score-number{font-size:42px;font-weight:950;letter-spacing:-.06em;color:var(--black);line-height:1.1;margin:7px 0}
+.score-number span{font-size:16px;color:var(--muted);letter-spacing:0;font-weight:700}
+.score-track{height:8px;background:#F0EAF0;border-radius:20px;overflow:hidden;margin:12px 0 16px}
+.score-track div{height:100%;background:var(--yellow);width:0;transition:width .25s}
+.phase-score-list{display:grid;gap:10px;margin-top:15px}
+.phase-score{display:flex;justify-content:space-between;gap:8px;font-size:13px;align-items:center}
+.phase-score b{font-size:12px;color:var(--muted)}
+.note{margin-top:16px;padding:12px;border-radius:12px;background:var(--soft-yellow);font-size:12px;color:#51451A}
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:18px 10px 28px}
+.hidden{display:none!important}
+.results{text-align:center;padding:26px 15px}
+.results .big-score{font-size:58px;font-weight:950;color:var(--magenta);line-height:1}
+.results h2{margin:14px 0 8px}
+.results p{color:var(--muted);max-width:540px;margin:0 auto 20px}
+.results-list{max-width:540px;margin:20px auto;text-align:left;display:grid;gap:8px}
+.results-item{display:flex;justify-content:space-between;padding:12px 14px;border:1px solid var(--line);border-radius:11px}
+@media(max-width:760px){
+ .intro-row,.practice-grid{grid-template-columns:1fr}
+ .phase-strip{grid-template-columns:repeat(2,1fr)}
+ .side-card{position:static}
+ .hero{padding-top:23px}
+ .container{padding:18px 13px 30px}
+ .panel{padding:16px}
+}
+@media(max-width:390px){.phase-tab{padding:10px}.phase-tab strong{font-size:13px}.phase-tab small{font-size:10px}.controls{flex-wrap:wrap}.controls .btn{flex:1}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <div class="brand-row"><div class="brand-mark">G</div><div class="brand-name">Coaching Skills Lab</div></div>
+    <p class="eyebrow">Interactive practice · GROW Model</p>
+    <h1>Ask better questions.<br><span class="accent">Coach with purpose.</span></h1>
+    <p>Practice choosing effective coaching questions across Goal, Reality, Options and Will. Learn from instant feedback and build confidence one conversation at a time.</p>
+  </div>
+</header>
+<main class="container">
+  <section class="intro-row">
+    <div class="panel">
+      <h2>Your coaching practice</h2>
+      <p>Read the situation, choose the strongest coaching question, and review the feedback. The best questions are open, curious and help the coachee think for themselves.</p>
+    </div>
+    <div class="panel">
+      <h3>How to use this lab</h3>
+      <p>1. Select a GROW phase.<br>2. Read the scenario and question.<br>3. Choose an answer to reveal feedback.<br>4. Complete all 12 questions and review your score.</p>
+    </div>
+  </section>
+
+  <nav class="phase-strip" aria-label="GROW phases">
+    <button class="phase-tab" data-phase="0" aria-pressed="true"><span class="phase-letter">G</span><strong>Goal</strong><small>Define success</small></button>
+    <button class="phase-tab" data-phase="1" aria-pressed="false"><span class="phase-letter">R</span><strong>Reality</strong><small>Understand now</small></button>
+    <button class="phase-tab" data-phase="2" aria-pressed="false"><span class="phase-letter">O</span><strong>Options</strong><small>Explore choices</small></button>
+    <button class="phase-tab" data-phase="3" aria-pressed="false"><span class="phase-letter">W</span><strong>Will</strong><small>Commit to action</small></button>
+  </nav>
+
+  <section class="practice-grid" id="practiceArea">
+    <div class="panel">
+      <div class="question-top"><span class="pill" id="phasePill">Phase 1 · Goal</span><span class="progress-text" id="questionCount">Question 1 of 12</span></div>
+      <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="scenario"><div class="scenario-label">Coaching scenario</div><p id="scenarioText"></p></div>
+      <h2 class="question" id="questionText"></h2>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="controls">
+        <button class="btn btn-light" id="prevBtn">← Previous</button>
+        <button class="btn btn-primary" id="nextBtn" disabled>Next question →</button>
+      </div>
+    </div>
+    <aside class="panel side-card">
+      <div class="mini-title">Your progress</div>
+      <div class="score-number" id="scoreNumber">0 <span>/ 12</span></div>
+      <div class="score-track"><div id="scoreBar"></div></div>
+      <p id="scoreCaption">Answer a question to start building your score.</p>
+      <div class="phase-score-list" id="phaseScores"></div>
+      <div class="note"><strong>Coach's reminder</strong><br>Stay curious. Avoid jumping to advice before the coachee has explored the situation and their options.</div>
+    </aside>
+  </section>
+
+  <section class="panel results hidden" id="results" aria-live="polite">
+    <span class="pill">Practice complete</span>
+    <div class="big-score" id="finalScore">0/12</div>
+    <h2 id="resultTitle">Your coaching snapshot</h2>
+    <p id="resultText"></p>
+    <div class="results-list" id="resultBreakdown"></div>
+    <button class="btn btn-primary" id="restartBtn">Practice again ↻</button>
+  </section>
+</main>
+<footer class="footer">GROW Coaching Lab · Goal · Reality · Options · Will / Way Forward</footer>
+
+<script>
+const phases = [
+ {name:"Goal",short:"Define success",intro:"Clarify what the coachee wants to achieve."},
+ {name:"Reality",short:"Understand now",intro:"Explore what is happening today, including facts, patterns and barriers."},
+ {name:"Options",short:"Explore choices",intro:"Help the coachee generate possible ways forward."},
+ {name:"Will",short:"Commit to action",intro:"Turn insight into specific actions, timelines and accountability."}
+];
+const questions = [
+ {phase:0,scenario:"A team leader says, “I want my team to be more proactive, but I’m not sure where to start.”",q:"Which question is the strongest starting point in the Goal phase?",opts:[
+  ["What would a more proactive team be doing differently?",true,"This invites the coachee to describe the desired future in observable terms."],
+  ["Why isn't your team proactive already?",false,"This moves toward diagnosing the current situation and may sound blaming."],
+  ["Have you tried setting stricter deadlines?",false,"This suggests a solution before the desired outcome is clearly defined."]
+ ]},
+ {phase:0,scenario:"An employee wants to improve their presentation skills before an important leadership meeting.",q:"Which question would help make the goal clearer?",opts:[
+  ["What would success look and sound like in that meeting?",true,"It helps define success in concrete, observable terms."],
+  ["What makes you nervous about presenting?",false,"This may be useful later when exploring current reality, but it does not define success."],
+  ["Who could make the slides for you?",false,"This jumps to a possible solution rather than clarifying the goal."]
+ ]},
+ {phase:0,scenario:"A manager says they want to improve team engagement.",q:"Which question best helps establish a meaningful outcome?",opts:[
+  ["What specific change would you most like to see, and by when?",true,"It clarifies the desired change and introduces a time horizon."],
+  ["Do you think your team likes you?",false,"This is leading and narrows the discussion to one possible explanation."],
+  ["What engagement survey tool should you use?",false,"This jumps to a method before defining the desired outcome."]
+ ]},
+ {phase:1,scenario:"A team leader says, “I have too much work. I end up doing everything myself because I don't trust my team to do it properly.”",q:"Which question best explores the current reality?",opts:[
+  ["What have you tried so far, and what happened?",true,"It explores current actions and evidence without judging or prescribing."],
+  ["Why don't you trust your team?",false,"It can sound accusatory and assumes trust is the only issue."],
+  ["What task will you delegate tomorrow?",false,"This moves to an action commitment before fully understanding the situation."]
+ ]},
+ {phase:1,scenario:"An employee has missed several deadlines and says they feel overwhelmed.",q:"Which question is most useful for understanding what is happening now?",opts:[
+  ["Can you walk me through how the work is currently prioritized?",true,"It explores current processes and can reveal practical barriers."],
+  ["Wouldn't a better calendar solve this?",false,"It assumes a solution before understanding the cause."],
+  ["What will you promise to finish by Friday?",false,"It focuses on commitment rather than understanding the present situation."]
+ ]},
+ {phase:1,scenario:"A manager wants to handle disagreement with a peer more constructively.",q:"Which question is most likely to uncover the current pattern?",opts:[
+  ["Can you describe a recent disagreement and how each of you responded?",true,"A specific example helps explore observable behavior and context."],
+  ["What should your peer change?",false,"It focuses on the other person and may reduce the coachee's reflection on their own role."],
+  ["Which conflict-resolution course should you attend?",false,"It jumps to a solution without exploring what is happening."]
+ ]},
+ {phase:2,scenario:"The coachee has identified that they are overloaded because they keep every task instead of delegating.",q:"Which question best supports the Options phase?",opts:[
+  ["What different approaches could help you share the workload?",true,"It invites the coachee to generate multiple possible approaches."],
+  ["Why have you kept every task until now?",false,"This continues exploring the past and current reality."],
+  ["Which task will you delegate by Thursday?",false,"This is closer to the Will phase, where a specific commitment is agreed."]
+ ]},
+ {phase:2,scenario:"An employee wants to build confidence when speaking to senior stakeholders.",q:"Which question opens up options without prescribing a solution?",opts:[
+  ["What are three ways you could practise or build that confidence?",true,"It encourages a range of possible approaches and keeps ownership with the coachee."],
+  ["Would you like me to book you on a presentation course?",false,"It offers a solution from the coach rather than first exploring the coachee's ideas."],
+  ["What exactly happened in your last presentation?",false,"This is useful for Reality, but it does not primarily generate options."]
+ ]},
+ {phase:2,scenario:"A team leader is considering several ways to improve team communication.",q:"Which question can broaden the coachee's thinking?",opts:[
+  ["If time or resources were not a constraint, what else might you try?",true,"It temporarily removes assumptions and helps surface additional possibilities."],
+  ["What is the main reason communication is poor?",false,"It focuses on diagnosing the current situation."],
+  ["When will you send the first team update?",false,"It focuses on implementation timing rather than generating alternatives."]
+ ]},
+ {phase:3,scenario:"The coachee has explored several ways to delegate more effectively and has chosen one approach.",q:"Which question best moves the conversation into Will?",opts:[
+  ["What specific action will you take, and by when?",true,"It converts the chosen option into a clear action with a timeframe."],
+  ["What other approaches could you consider?",false,"It continues exploring options rather than securing a commitment."],
+  ["What is happening when you try to delegate?",false,"It explores current reality rather than agreeing next steps."]
+ ]},
+ {phase:3,scenario:"An employee has chosen to practise presentations by leading a short section of the next team meeting.",q:"Which question strengthens accountability?",opts:[
+  ["How will you know you have completed the action, and when will you review it?",true,"It defines evidence of completion and a review point."],
+  ["What makes presenting difficult for you?",false,"This explores reality and may be useful earlier in the conversation."],
+  ["What other presentation techniques have you heard about?",false,"This continues brainstorming instead of confirming a commitment."]
+ ]},
+ {phase:3,scenario:"A manager has agreed to have a direct conversation with a colleague about a recurring issue.",q:"Which question checks commitment and support?",opts:[
+  ["On a scale of 1–10, how confident are you about taking this step, and what would raise your confidence?",true,"It checks confidence and invites the coachee to identify support or adjustments."],
+  ["Who is responsible for this problem?",false,"It can return the discussion to blame rather than implementation."],
+  ["What are all the possible ways to approach the colleague?",false,"It reopens option generation after the coachee has already chosen an action."]
+ ]}
+];
+let current=0;
+const answers = Array(questions.length).fill(null);
+const phaseTabs=[...document.querySelectorAll(".phase-tab")];
+const $=id=>document.getElementById(id);
+function renderPhaseScores(){
+ $("phaseScores").innerHTML=phases.map((p,i)=>{
+  const ids=questions.map((q,n)=>q.phase===i?n:null).filter(n=>n!==null);
+  const done=ids.filter(n=>answers[n]!==null).length;
+  const score=ids.filter(n=>answers[n]===true).length;
+  return `<div class="phase-score"><span><strong>${"GROW"[i]}</strong> · ${p.name}</span><b>${score}/${ids.length} · ${done} done</b></div>`;
+ }).join("");
+}
+function render(){
+ const item=questions[current], phase=phases[item.phase];
+ phaseTabs.forEach((b,i)=>b.setAttribute("aria-pressed",String(i===item.phase)));
+ $("phasePill").textContent=`Phase ${item.phase+1} · ${phase.name}`;
+ $("questionCount").textContent=`Question ${current+1} of ${questions.length}`;
+ $("progressBar").style.width=`${((current+1)/questions.length)*100}%`;
+ $("scenarioText").textContent=item.scenario;
+ $("questionText").textContent=item.q;
+ $("options").innerHTML="";
+ const letters=["A","B","C"];
+ item.opts.forEach((opt,i)=>{
+  const b=document.createElement("button");
+  b.className="option";
+  b.innerHTML=`<span class="option-key">${letters[i]}</span><span>${opt[0]}</span>`;
+  b.disabled=answers[current]!==null;
+  if(answers[current]!==null){
+   if(opt[1])b.classList.add("correct");
+   else if(answers[current]===i)b.classList.add("incorrect");
+  }
+  b.addEventListener("click",()=>choose(i));
+  $("options").appendChild(b);
+ });
+ const fb=$("feedback");
+ fb.className="feedback";
+ fb.innerHTML="";
+ if(answers[current]!==null){
+  const chosen=item.opts[answers[current]], good=chosen[1];
+  fb.classList.add("show",good?"good":"bad");
+  fb.innerHTML=`<strong>${good?"✓ Strong coaching question":"↻ Consider another approach"}</strong><p>${chosen[2]}${good?"":" The strongest option is: “"+item.opts.find(o=>o[1])[0]+"”"}</p>`;
+ }
+ $("prevBtn").disabled=current===0;
+ $("nextBtn").disabled=answers[current]===null;
+ $("nextBtn").textContent=current===questions.length-1?"View results →":"Next question →";
+ const correct=answers.filter((a,i)=>a!==null&&questions[i].opts[a][1]).length;
+ const done=answers.filter(a=>a!==null).length;
+ $("scoreNumber").innerHTML=`${correct} <span>/ ${questions.length}</span>`;
+ $("scoreBar").style.width=`${(correct/questions.length)*100}%`;
+ $("scoreCaption").textContent=done===0?"Answer a question to start building your score.":`${done} of ${questions.length} questions answered · ${Math.round(correct/questions.length*100)}% correct so far.`;
+ renderPhaseScores();
+}
+function choose(index){
+ if(answers[current]!==null)return;
+ answers[current]=index;
+ render();
+}
+function showResults(){
+ $("practiceArea").classList.add("hidden");
+ document.querySelector(".phase-strip").classList.add("hidden");
+ $("results").classList.remove("hidden");
+ const correct=answers.filter((a,i)=>a!==null&&questions[i].opts[a][1]).length;
+ $("finalScore").textContent=`${correct}/${questions.length}`;
+ $("resultTitle").textContent=correct>=10?"Strong coaching instincts":correct>=7?"Good foundation — keep practising":"Your next step: build phase awareness";
+ $("resultText").textContent=correct>=10?"You consistently recognized questions that support reflection, exploration and commitment. Keep practising the same skills in real conversations.":correct>=7?"You have a useful foundation. Review the phase breakdown and notice when a question jumps too quickly to advice or action.":"Review the purpose of each GROW phase, then practise again. Focus on helping the coachee think rather than solving the problem for them.";
+ $("resultBreakdown").innerHTML=phases.map((p,i)=>{
+  const ids=questions.map((q,n)=>q.phase===i?n:null).filter(n=>n!==null);
+  const score=ids.filter(n=>answers[n]!==null&&questions[n].opts[answers[n]][1]).length;
+  return `<div class="results-item"><span><strong>${"GROW"[i]}</strong> · ${p.name}</span><strong>${score}/${ids.length}</strong></div>`;
+ }).join("");
+}
+phaseTabs.forEach((b,i)=>b.addEventListener("click",()=>{
+ const first=questions.findIndex(q=>q.phase===i);
+ current=first;
+ render();
+}));
+$("prevBtn").addEventListener("click",()=>{if(current>0){current--;render();}});
+$("nextBtn").addEventListener("click",()=>{
+ if(answers[current]===null)return;
+ if(current<questions.length-1){current++;render();}
+ else showResults();
+});
+$("restartBtn").addEventListener("click",()=>{
+ for(let i=0;i<answers.length;i++)answers[i]=null;
+ current=0;
+ $("results").classList.add("hidden");
+ $("practiceArea").classList.remove("hidden");
+ document.querySelector(".phase-strip").classList.remove("hidden");
+ render();
+});
+render();
+</script>
+</body>
+</html>
